@@ -1,0 +1,25 @@
+api:
+  v1: v3/api-docs
+
+spring:
+  application:
+    name: MEMBER-SERVICE
+  profiles:
+    active: default
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: member-service
+      fail-fast: true
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+
+token:
+  seed:
+    secret: vDGvIwBswG3mgeg02bFScw2JF5w/PKCPDFAsySjaedrDc5516LEppKGgZeLPRusuHy20cj1rFSjUbwL3u3SczQ==
