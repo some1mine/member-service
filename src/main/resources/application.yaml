@@ -2,8 +2,29 @@ api:
   v1: v3/api-docs
 
 spring:
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test?currentSchema=public&options=-c%20TimeZone=Asia/Seoul
+    username: postgres
+    password: postgres
+  jackson:
+    time-zone: Asia/Seoul
+  # jpa properties
+  jpa:
+    hibernate:
+      ddl-auto: update # When you launch the application for the first time - switch "none" at "create"
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
   application:
-    name: MEMBER-SERVICE
+    name: member-service
   profiles:
     active: default
   cloud:
@@ -21,5 +42,16 @@ eureka:
       defaultZone: http://admin:admin@localhost:8761/eureka/
 
 token:
-  seed:
-    secret: vDGvIwBswG3mgeg02bFScw2JF5w/PKCPDFAsySjaedrDc5516LEppKGgZeLPRusuHy20cj1rFSjUbwL3u3SczQ==
+  maker: vDGvIwBswG3mgeg02bFScw2JF5w/PKCPDFAsySjaedrDc5516LEppKGgZeLPRusuHy20cj1rFSjUbwL3u3SczQ==
+  private: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDYaHyfCAD9WOJNIOn3prTO2sdUGetSHLr+kE7VG1041yK+bh2iOkobMM5p//gZ66l86T4FpJhbajDmqLMxiJrzblNLDCTT8BDThKFS1Vsn7jlWwpXT8BFa2IrTOjWfPbMXo0GQWzVXO6uRAG05gzzC0StkX+WSdEJQE/62Xgasx1xpnQPNrW7gkdH8S3dnc/w5yOTLB/rRjrPli4BthYyz7gp8SyiEjANycqd6TTWA0TCMXocVYnp82YsVgKo1mFZhofqD5DMCQwHi6Kv6PcCKpTdTIF1edD/RxJLqSm1Ro5dJ9dVHWuZd7OJTp548tn2FAXiX3+aSuwoPS+r3fpvTAgMBAAECggEAKcjS9ynmdwRofZfzVPv9QUuA3T4775jYijp23jLwZv8zGC3OzvoOQP3FfTYNQ4P7L8EhVpmXSV9RndfI8bF8qbANqRnpKnrZ5N1hAMttVGJs89GSeF+MGkxhUbOVku+o2tGM4UCbJgLBd7frXwV1/++/Pxw9CXAlNa0Gq1OwWj+w6wtFcMWxllfug2vi4oeXJUaPu3KDI1WnOnA5Lo3hoytzBrI4pngdOBOgSdyCR+/lYEyeYAuyiaf8x/buaNmTP9r+hX/1sojeInc72qglBBsSqdusltbi2pP+mRb2xhb9Isz5bWp2AT6witKlIq0vggefO30Ldb45vV/+z2j6cQKBgQD+9NuAz55WfxVUSuwZvtA3m3F41+2+U1gVx/Y8lzON7W0SBlTDI1VWaEJWYB8UUcB8ZXsbE6j+8gIVd5+VbBZZbBGDVMDtMBmefDjH8Fnfptkws8oB7Z1SZ06IooikInIksRKIpUSrY1J+LP3Rfh0pyQss3CzmG/qoCmyJU0qvbwKBgQDZSz0SRAjRAYV0w5J2aawHXMy9W6ZscWlYUU3RULw+R1oK6IY1nwX3cdWDhxYiEKJ1wZ0BVjTrOq0/zcqeE9X79Y80ISDcfVfIuvDTNXecLl2hnJRBFwaOi2Etvjy18Z2Tk95RZlPTFGdK6bRHuIXxOe+3LTArqSxDhOXus8jn3QKBgQDgm8ZlDINpoDuiLv8hD0FQO9kTpOcFrVcEmU0MxAffGTPllT5HS3F61g7bGYNH213AOYbiq8dOEtZTIzer47UswlALazcrvhxTywwa2FvU9KCSj1F/sV3PosNFDCtkrhPwzy6Mw0xj0PRzxB831+rJTRxTQQUtE6kXMVe9A2vgcQKBgHi6MMhBPJTDP57MOkfIFmhQywA6N5DwwhLruUyeirgfdIuy/T41iF8ew/47w7RRgbHjTJQ9jVFUXIWilPyXEMDYgiP4dAWNLoS8OKlgf4Aq0qLEGCrB3Ea+cdO0ao68G0yvT0nyjIguQeWBS0S95M1N3z3qwWTArXMmF4o0IV+RAoGAJvskLPkfM2/yHPZzZBAklisoZDrjXE7JjldqMtEpwGKbVKEgILjQuPLe8cbZo0yaXOjvvffths/FR76HkzQATuzrsP7AVvniEedBQNS7y4/XOL2XFzXguVYL5tsKYYdKA7yJB+MDvbh86BVmm/UhuPO+tMkviczYCg/8CBWRrEY=
+  public: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2Gh8nwgA/VjiTSDp96a0ztrHVBnrUhy6/pBO1RtdONcivm4dojpKGzDOaf/4GeupfOk+BaSYW2ow5qizMYia825TSwwk0/AQ04ShUtVbJ+45VsKV0/ARWtiK0zo1nz2zF6NBkFs1VzurkQBtOYM8wtErZF/lknRCUBP+tl4GrMdcaZ0Dza1u4JHR/Et3Z3P8Ocjkywf60Y6z5YuAbYWMs+4KfEsohIwDcnKnek01gNEwjF6HFWJ6fNmLFYCqNZhWYaH6g+QzAkMB4uir+j3AiqU3UyBdXnQ/0cSS6kptUaOXSfXVR1rmXeziU6eePLZ9hQF4l9/mkrsKD0vq936b0wIDAQAB
+
+kafka:
+  # 로컬 도커 브로커 포트
+  bootstrap-servers: localhost:29092
+  topic:
+    # 주문 이벤트를 주고받는 토픽 이름
+    async-orders: pay.async-orders.v1
+  consumer:
+    # 샘플 컨슈머 그룹
+    group-id: pay-async-consumer

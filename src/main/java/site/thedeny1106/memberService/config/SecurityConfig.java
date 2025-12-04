@@ -48,14 +48,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                        .requestMatchers("/api/v1/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/**").permitAll()
-                        .requestMatchers("/**").permitAll()
+                .authorizeHttpRequests(auth-> {
+                            auth.requestMatchers("/api/v1/**").permitAll()
+                                    .requestMatchers("/swagger-ui/**").permitAll()
+                                    .requestMatchers("/v3/**").permitAll()
+                                    .requestMatchers("/login").permitAll();
+                        }
                 )
                 .build();
-
     }
 }

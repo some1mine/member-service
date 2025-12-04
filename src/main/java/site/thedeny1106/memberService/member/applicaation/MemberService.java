@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,7 @@ import site.thedeny1106.memberService.member.domain.MemberRepository;
 import site.thedeny1106.memberService.member.presentation.dto.LoginRequest;
 import site.thedeny1106.memberService.member.util.JwtProvider;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +44,7 @@ public class MemberService {
         );
         MemberInfo response = MemberInfo.from(memberRepository.save(member));
 
-        return new ResponseEntity<>(HttpStatus.OK.value(), response, 1);
+        return new ResponseEntity<>(HttpStatus.CREATED.value(), response, 1);
     }
 
     public ResponseEntity<MemberInfo> update(String id, MemberCommand command) {
@@ -82,11 +80,25 @@ public class MemberService {
         if (passwordEncoder.matches(request.pw(), member.getPassword())) {
             Authentication authentication = new LoginAuthentication(member.getId().toString(), null);
             String token = jwtProvider.generateToken(authentication);
-            Map<String, Object> data = Map.of("token", token);
+            Map<String, Object> data = Map.of("access-token", token, "refresh-token", jwtProvider.generateRefreshToken(authentication));
             return new ResponseEntity<>(HttpStatus.OK.value(), data, 1);
         }
         return null;
     }
+
+    public ResponseEntity<Map<String, Object>> refreshToken(String token){
+//        String token = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+        String subject = jwtProvider.getUserDataFromJwt(token);
+        UUID id = UUID.fromString(subject);
+        Optional<Member> memberOptional = memberRepository.findById(id);
+        Map<String, Object> res = new HashMap<>();
+        if(memberOptional.isPresent()){
+            Authentication authentication = new UsernamePasswordAuthenticationToken(subject, null);
+            res.put("access-token", jwtProvider.generateToken(authentication));
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED.value(), res, 1);
+    }
+
 
     public boolean check(String method, String path) {
         return true;

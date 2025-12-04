@@ -1,5 +1,6 @@
 package site.thedeny1106.memberService.filter;
 import jakarta.servlet.FilterChain;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getJwtFromRequest(request);
-        if (StringUtils.isNotBlank(token) || request.getContextPath().endsWith("/authorizations/check")) {
+        if (token != null && (StringUtils.isNotBlank(token) || request.getServletPath().endsWith("/authorizations/check"))) {
             jwtProvider.validateToken(token);
             log.info("valid token {}", token);
         }
@@ -34,3 +35,4 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 }
+

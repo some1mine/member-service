@@ -18,8 +18,13 @@ public class LoginController {
         return memberService.login(request);
     }
 
-    @GetMapping("${api.v1}/authorizations/check")
+    @GetMapping("/api/v1/authorizations/check")
     public Boolean check(@RequestParam("httpMethod") String httpMethod, @RequestParam("requestPath") String requestPath){
         return memberService.check(httpMethod, requestPath);
+    }
+
+    @GetMapping("${api.v1}/refresh/token")
+    public ResponseEntity<Map<String, Object>> refreshToken(@RequestHeader("refresh-token") String token){
+        return memberService.refreshToken(token);
     }
 }
